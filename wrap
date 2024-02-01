@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# -S -euo pipefail
+
+case "$1" in
+  "-s" | "--single")
+    sed 's| |\n|g' <<< "${@:2}" | sed "s|\(.*\)|'\1'|g" | sort ;;
+  *)
+    sed 's| |\n|g' <<< "${@:2}" | sed 's|\(.*\)|"\1"|g' | sort ;;
+esac
