@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+partial_source() {
+  variable="$1"
+  file="$2"
+  while IFS= read -r line; do
+    if [[ "$line" == "$variable"=* ]]; then
+      source /dev/stdin <<< "$line"
+    fi
+  done < "$file"
+  declare variable="$variable"
+  echo "${!variable}"
+}
+
+partial_source "$@"
