@@ -6,6 +6,7 @@ partial_source() {
   while IFS= read -r line; do
     if [[ "$line" == "$variable"=* ]]; then
       source /dev/stdin <<< "$line"
+      break
     fi
   done < "$file"
   declare variable="$variable"
