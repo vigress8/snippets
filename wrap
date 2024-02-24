@@ -1,8 +1,10 @@
-#! /usr/bin/env -S -i PATH="${PATH}" bash --noprofile --norc -euo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
 case "$1" in
   "-s" | "--single")
-    sed 's| |\n|g' <<< "${@:2}" | sed "s|\(.*\)|'\1'|g" | sort ;;
+    shift
+    printf "%s\n" "$@" | sed "s|\(.*\)|'\1'|g" | sort ;;
   *)
-    sed 's| |\n|g' <<< "${@}"   | sed 's|\(.*\)|"\1"|g' | sort ;;
+    printf "%s\n" "$@" | sed 's|\(.*\)|"\1"|g' | sort ;;
 esac

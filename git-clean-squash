@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+# https://stackoverflow.com/a/69827502
+set -eu
+from="$1" to="$2" msg="$3"
+temp="temp-$(date +%s)"
+
+git checkout -b "$temp" "$from"
+git merge --squash "$to"
+git commit -m "$msg"
+git checkout "$to"
+git reset --hard "$temp"
+git branch -d "$temp"
