@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 inherit() {
-    (($# > 1)) || exit 1
-    file="$1"
-    shift
-    while (($#)); do
-        variable="$1"
+    _=$(($# > 1)) || exit 1
+    file="$1"; shift
+    temp="$(mktemp)"
+    for var; do
         while IFS= read -r line; do
-            if [[ $line == "$variable"=* ]]; then
-                source /dev/stdin <<< "$line"
-                break
-            fi
+            case "$line" in "$var"=*)
+                printf "%s\n" "$line" >> "$temp"
+                break ;;
+            esac
         done < "$file"
-        shift
     done
+    . "$temp"
+    printf > "$temp"
 }
 
 inherit "$@"
