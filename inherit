@@ -1,13 +1,15 @@
 #!/usr/bin/env sh
 
 _=$(($# > 1)) || exit 1
-file="$1"; shift
+file="$1"
+shift
 temp="$(mktemp)"
 for var; do
     while IFS= read -r line; do
         case "$line" in "$var"=*)
             printf "%s\n" "$line" >> "$temp"
-            break ;;
+            break
+            ;;
         esac
     done < "$file"
 done

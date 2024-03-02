@@ -1,7 +1,23 @@
 #!/usr/bin/env sh
 # https://stackoverflow.com/a/69827502
-set -eu
-from="$1" to="$2" msg="$3"
+set -euo pipefail
+
+while [ $# -ne 0 ]; do
+    case "$1" in
+        -f | --from) from="$2" ;;
+        -t | --to) to="$2" ;;
+        -m | --message) msg="$2" ;;
+        *)
+            echo "Invalid option: $1" >&2
+            return 1
+            ;;
+    esac
+    shift 2
+done
+
+from="${from:-$(git rev-parse --abbrev-ref origin/HEAD | sed 's_^origin/__')}"
+to="${to:-$(git symbolic-ref --short HEAD)}"
+msg="${msg:-$(git log --reverse --format=%s "$from..$to" | head -1)}"
 temp="temp-$(date +%s)"
 
 git checkout -b "$temp" "$from"
